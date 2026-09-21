@@ -4,20 +4,13 @@
 <body>
   <p>Opening email in Mail…</p>
   <script>
-    // 1. Read the email ID from the link (the part after ?id=)
-    let id = new URLSearchParams(location.search).get("id");
+    // Read the ID from the part after # (this part is never sent to GitHub)
+    let id = decodeURIComponent(location.hash.slice(1));
 
     if (id) {
-      // 2. Remove < and > in case they're included
       id = id.replace(/[<>]/g, "");
-
-      // 3. Build the Mail link (@ becomes %40, which you tested works)
       const mailLink = "message://%3C" + encodeURIComponent(id) + "%3E";
-
-      // 4. Jump to Mail
       location.href = mailLink;
-
-      // 5. Backup button if the browser blocks the automatic jump
       document.body.innerHTML += '<p><a href="' + mailLink + '">Click here if Mail did not open</a></p>';
     } else {
       document.body.innerHTML = "<p>No email ID in this link.</p>";
